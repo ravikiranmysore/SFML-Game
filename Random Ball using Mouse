@@ -1,0 +1,48 @@
+#include "SFML\Graphics.hpp"
+
+int main()
+{
+    sf::RenderWindow renderWindow;
+    std::vector<sf::CircleShape*> balls;
+    sf::Event evnt;
+    
+    renderWindow.create(sf::VideoMode(800, 600), "Balls", sf::Style::Close);
+    
+    while (renderWindow.isOpen())
+    {
+        while (renderWindow.pollEvent(evnt))
+        {
+            if (evnt.type == sf::Event::Closed)
+                renderWindow.close();
+            
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+                renderWindow.close();
+            
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            {
+                sf::CircleShape* ball = new sf::CircleShape;
+                ball->setRadius(30);
+                ball->setFillColor(sf::Color::Red);
+                
+                ball->setPosition(evnt.mouseButton.x, evnt.mouseButton.y);
+                balls.push_back(ball);
+            }
+            
+        }
+        renderWindow.clear(sf::Color::Black);
+        
+        for (int i = 0; i < balls.size(); i++)
+        {
+            renderWindow.draw(*balls[i]);
+        }
+        
+        renderWindow.display();
+    }
+    
+    for (int i = 0; i < balls.size(); i++)
+    {
+        delete balls[i];
+        balls[i] = 0;
+    }
+    return 0;
+}
