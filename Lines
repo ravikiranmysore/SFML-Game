@@ -1,0 +1,58 @@
+#include <SFML/Graphics.hpp>
+#include<iostream>
+using namespace std;
+
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML!");
+
+    sf::Vector2i mouse_position;
+    mouse_position = sf::Mouse::getPosition(window);
+
+    sf::CircleShape ellipse;
+    ellipse.setOutlineThickness(5);
+
+    sf::Color col[] =
+    {
+        sf::Color(sf::Color::Blue),
+        sf::Color(sf::Color::Yellow),
+        sf::Color(sf::Color::Green),
+        sf::Color(sf::Color::Red)
+    };
+
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape)
+                window.close();
+        }
+
+        window.clear();
+
+        ellipse.setOrigin(0, 0);
+        for (int i = 0; i < 4; i++)
+        {
+            ellipse.setPosition( i*200,0);
+            ellipse.setRadius(50);
+            ellipse.setFillColor(col[i]);
+            ellipse.setOutlineColor(col[i + 1]);
+
+
+            sf::VertexArray lines(sf::LinesStrip, 2);
+            lines[0].position = sf::Vector2f(ellipse.getRadius(), ellipse.getRadius());
+            lines[1].position = sf::Vector2f(650, 50);
+            window.draw(ellipse);
+            window.draw(lines);
+
+        }
+        window.display();
+    }
+    return 0;
+
+}
