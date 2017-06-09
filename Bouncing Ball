@@ -1,0 +1,51 @@
+#include <SFML/Graphics.hpp>
+#include <time.h>
+#include <iostream>
+
+using namespace sf;
+
+int width = 800;
+int height = 600;
+
+int main()
+{
+    srand(time(0));
+    RenderWindow app(VideoMode(width, height), "Bouncing Ball!");
+    app.setFramerateLimit(60);
+    
+    float x = 100;
+    float y = 100;
+    float xspeed = 5;
+    float yspeed = 3;
+    
+    while (app.isOpen())
+    {
+        Event e;
+        while (app.pollEvent(e))
+        {
+            if (e.type == Event::Closed)
+                app.close();
+        }
+        
+        // Circle - Yellow
+        sf::CircleShape circle;
+        circle.setFillColor(sf::Color::Yellow);
+        circle.setPosition(sf::Vector2f(x, y));
+        circle.setRadius(50);
+        
+        // bounce
+        x = x + xspeed;
+        y = y + yspeed;
+        if ( x < 0 || x > width - 100) {
+            xspeed = xspeed * -1;
+        }
+        if (y < 0 || y > height -100 ) {
+            yspeed = yspeed * -1;
+        }
+        
+        app.clear();
+        app.draw(circle);
+        app.display();
+    }
+    return 0;
+}
