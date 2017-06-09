@@ -1,0 +1,67 @@
+#include <SFML/Graphics.hpp>
+#include <iostream>
+using namespace std;
+
+const int SCREEN_WIDTH = 600;
+const int SCREEN_HEIGHT = 400;
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML!");
+
+    sf::Vector2i mouse_position;
+    mouse_position = sf::Mouse::getPosition(window);
+
+    sf::RectangleShape rect;
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed )
+                window.close();
+
+
+            if (event.type == sf::Event::MouseMoved)
+            {
+                mouse_position.x = event.mouseButton.x;
+                mouse_position.y = event.mouseButton.y;
+            }
+        }
+
+        window.clear();
+
+        sf::VertexArray line(sf::LinesStrip, 2);
+        line[0].position = sf::Vector2f(100, 0);
+        line[1].position = sf::Vector2f(100, 400);
+
+        window.draw(line);
+
+        cout << event.mouseMove.x << " " << event.mouseMove.y << endl;
+
+        if (event.mouseMove.x > event.MouseEntered && event.mouseMove.x  < 100 )
+        {
+
+            rect.setPosition(sf::Vector2f(0, 0));
+            rect.setSize(sf::Vector2f(100, 400));
+            rect.setFillColor(sf::Color::Green);
+        }
+        else
+        {
+            rect.setFillColor(sf::Color::Transparent);
+            window.draw(line);
+            if (event.mouseMove.x > 100 && event.MouseEntered)
+            {
+                rect.setPosition(sf::Vector2f(100, 0));
+                rect.setSize(sf::Vector2f(500, 400));
+                rect.setFillColor(sf::Color::Yellow);
+            }
+        }
+        window.draw(line);
+        window.draw(rect);
+        window.display();
+    }
+    return 0;
+
+}
