@@ -1,0 +1,67 @@
+// Random Balls
+
+#include <SFML/Graphics.hpp>
+#include <time.h>
+#include <iostream>
+#include <array>
+
+using namespace sf;
+using namespace std;
+
+float width = 800;
+float height = 600;
+
+int main()
+{
+    RenderWindow app(VideoMode(width, height), "Doodle Game!");
+    app.setFramerateLimit(60);
+
+    std::vector<sf::CircleShape*> balls;
+
+    Vector2f location =  Vector2f(100.0f,100.0f);
+    Vector2f velocity =  Vector2f(2.0f, 5.0f);
+
+    while (app.isOpen())
+    {
+        Event e;
+        while (app.pollEvent(e))
+        {
+            if (e.type == Event::Closed)
+                app.close();
+        }
+
+        sf::CircleShape* ball = new sf::CircleShape;
+        ball->setRadius(30);
+        ball->setFillColor(sf::Color::Green);
+
+        float randomNumber = rand() % 800;
+        float randomNumber2 = rand() % 600;
+        for (int i = 0; i<5; i++)
+            ball->setPosition(randomNumber, randomNumber2);
+
+        balls.push_back(ball);
+
+        location +=  velocity;
+
+        if ((location.x > width - 100) || (location.x  < 0)) {
+            velocity.x = velocity.x * -1;
+        }
+        if ((location.y > height - 100) || (location.y < 0)) {
+            velocity.y = velocity.y * -1;
+        }
+        app.clear();
+
+        for (int i = 0; i < balls.size(); i++)
+        {
+            app.draw(*balls[i]);
+        }
+
+        app.display();
+    }
+    for (int i = 0; i < balls.size(); i++)
+    {
+        delete balls[i];
+        balls[i] = 0;
+    }
+    return 0;
+}
