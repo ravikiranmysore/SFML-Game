@@ -1,0 +1,78 @@
+//Simple pendulum in SFML
+
+#include <SFML/Graphics.hpp>
+#include <time.h>
+#include <iostream>
+
+using namespace sf;
+using namespace std;
+
+#define PI 3.14
+
+float width = 800;
+float height = 600;
+float theta = PI /2;
+
+
+int main()
+{
+    RenderWindow app(VideoMode(width, height), "Doodle Game!");
+    app.setFramerateLimit(60);
+
+    float x = 300;
+    float y = 300;
+    float xspeed = 2;//
+    float yspeed = 5.3;
+    float aVel = 0.0f;
+    float aAcc = 0.0f;
+
+    while (app.isOpen())
+    {
+        Event e;
+        while (app.pollEvent(e))
+        {
+            if (e.type == Event::Closed)
+                app.close();
+
+        }
+        
+        sf::CircleShape c;
+        c.setFillColor(sf::Color::Yellow);
+        c.setRadius(50.0f);
+
+        x = x + xspeed * cos(theta) ;
+        y = y + yspeed * sin(theta) ;
+
+        if ((x > 500 ) || (x < 300)) {
+            xspeed = xspeed * -1;
+        }
+        if ((y > 400) || (y < 200)) {
+            yspeed = yspeed * -1;
+        }
+
+        c.setPosition(sf::Vector2f(x, y));
+
+        sf::Vector2f position = c.getPosition();
+        position.x += 50;
+        position.y += 50;
+
+        sf::Vertex line[] =
+        {
+            sf::Vertex(sf::Vector2f(width / 2,0)),
+            sf::Vertex(sf::Vector2f(position.x,position.y)),
+
+        };
+        
+        app.clear();
+        app.draw(line, 2, sf::Lines);
+        app.draw(c);
+
+        aAcc = -0.1 * sin(theta);
+        theta += aVel;
+        aVel += aAcc;
+        aVel *= 0.75;
+        app.display();
+    }
+
+    return 0;
+}
