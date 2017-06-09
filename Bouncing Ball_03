@@ -1,0 +1,94 @@
+#include <SFML/Graphics.hpp>
+#include<iostream>
+using namespace std;
+
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML!");
+
+    sf::Vector2i mouse_position;
+    mouse_position = sf::Mouse::getPosition(window);
+
+    sf::CircleShape ball;
+    ball.setRadius(10.0f);
+    ball.setFillColor(sf::Color::Red);
+    int x2 = 100, y2 = 100, xspeed = 5, yspeed = 5;
+
+    sf::CircleShape ellipse;
+    ellipse.setOutlineThickness(5);
+
+    sf::Color col[] =
+    {
+        sf::Color(sf::Color::Magenta),
+        sf::Color(sf::Color::Yellow),
+        sf::Color(sf::Color::Green),
+        sf::Color(sf::Color::Blue)
+    };
+
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape) window.close();
+
+            if (event.type == sf::Event::MouseButtonPressed
+                &&
+                event.mouseButton.button == sf::Mouse::Left)
+            {
+                mouse_position.x = event.mouseButton.x;
+                mouse_position.y = event.mouseButton.y;
+            }
+        }
+
+        window.clear();
+
+        for (int x = 0; x <= mouse_position.x; x += 10)
+        {
+            for (int y = 0; y <= mouse_position.y; y += 10)
+            {
+                sf::VertexArray lines(sf::LinesStrip, 5);
+                lines[0].position = sf::Vector2f(x, y);
+                lines[1].position = sf::Vector2f(x, y + 200);
+                lines[2].position = sf::Vector2f(x + 200, y + 200);
+                lines[3].position = sf::Vector2f(x + 200, y);
+                lines[4].position = sf::Vector2f(x, y);
+            }
+        }
+
+        x2 = x2 + xspeed;
+        y2 = y2 + yspeed;
+        if (x2 > SCREEN_WIDTH || x2 < 0)
+        {
+            xspeed = xspeed *-1;
+        }
+        if (y2 > SCREEN_HEIGHT || y2 < 0)
+        {
+            yspeed = yspeed *-1;
+        }
+        ball.setPosition(sf::Vector2f(x2, y2));
+
+        ellipse.setOrigin(0, 0);
+        for (int i = 0; i < 4; i++)
+        {
+            ellipse.setPosition(i * 230, 0);
+            ellipse.setRadius(50);
+            ellipse.setFillColor(col[i]);
+            ellipse.setOutlineColor(col[i + 1]);
+
+            sf::VertexArray lines(sf::LinesStrip, 3);
+            lines[0].position = sf::Vector2f(ellipse.getRadius(), ellipse.getRadius());
+            lines[1].position = sf::Vector2f( x2+15, y2+10);
+            lines[2].position = sf::Vector2f(740, 50);
+            window.draw(ellipse);
+            window.draw(lines);
+        }
+        window.draw(ball);
+        window.display();
+    }
+    return 0;
+}
