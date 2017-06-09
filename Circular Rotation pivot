@@ -1,0 +1,60 @@
+#include <SFML/Graphics.hpp>
+#include <time.h>
+#include <iostream>
+
+#define PI 3.14
+
+using namespace sf;
+using namespace std;
+
+int width = 800;
+int height = 600;
+
+float r = 150;
+float theta = PI;
+
+int main()
+{
+    srand(time(0));
+
+    RenderWindow app(VideoMode(width, height), " Game!");
+    app.setFramerateLimit(60);
+
+    while (app.isOpen())
+    {
+        Event e;
+        while (app.pollEvent(e))
+        {
+            if (e.type == Event::Closed)
+                app.close();
+        }
+
+        //draw the Centre : white rect
+        sf::RectangleShape rectangle;
+        rectangle.setSize(sf::Vector2f(3,50));
+        rectangle.move((float)width-400 , (float)height-100 );
+
+        //Circle - Red
+        float x2 = r * cos(theta);
+        float y2 = r * sin(theta);
+        CircleShape s;
+        s.setRadius(50.0f);
+        s.setPosition(sf::Vector2f(x2 + width / 2, y2 + height / 2 -150));
+        theta += 0.1;
+        s.setFillColor(sf::Color::Red);
+
+        //to draw line
+        sf::Vertex line[] =
+        {
+            sf::Vertex(sf::Vector2f(rectangle.getPosition())),
+            sf::Vertex(sf::Vector2f(x2 + width / 2, y2 + height / 2 - 100)),
+        };
+
+        app.clear();
+        app.draw(rectangle);
+        app.draw(s);
+        app.draw(line, 2, sf::PrimitiveType::Lines);
+        app.display();
+    }
+    return 0;
+}
