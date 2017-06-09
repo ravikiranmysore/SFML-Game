@@ -1,0 +1,47 @@
+#include <SFML/Graphics.hpp>
+
+const int SCREEN_WIDTH = 600;
+const int SCREEN_HEIGHT = 400;
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML !");
+
+    sf::Vector2i mouse_position;
+    mouse_position = sf::Mouse::getPosition(window);
+
+    sf::CircleShape ellipse;
+    ellipse.setOutlineThickness(5);
+    int num[] = { -100,-120,-150,-170 };
+    int rad[] = { 100,80,50,30 };
+    sf::Color col[] =
+    {
+        sf::Color(sf::Color::Red),
+        sf::Color(sf::Color::Yellow),
+        sf::Color(sf::Color::Green),
+        sf::Color(sf::Color::Blue)
+    };
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape) window.close();
+        }
+
+        window.clear();
+
+        for (int i = 0; i < 4; i++)
+        {
+            ellipse.setOrigin(num[i],num[i]);
+            ellipse.setRadius(rad[i]);
+            ellipse.setFillColor(col[i]);
+            ellipse.setOutlineColor(col[i+1]);
+            window.draw(ellipse);
+        }
+
+        window.display();
+    }
+    return 0;
+}
