@@ -1,0 +1,86 @@
+#include <SFML/Graphics.hpp>
+#include<iostream>
+using namespace std;
+
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML!");
+
+    sf::Vector2i mouse_position;
+    mouse_position = sf::Mouse::getPosition(window);
+
+    sf::RectangleShape rectangle(sf::Vector2f(50, 50));
+    rectangle.setPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape) window.close();
+
+            if (event.type == sf::Event::MouseButtonPressed
+                    &&
+                    event.mouseButton.button == sf::Mouse::Left)
+            {
+                mouse_position.x = event.mouseButton.x;
+                mouse_position.y = event.mouseButton.y;
+                rectangle.setPosition(mouse_position.x, mouse_position.y);
+                rectangle.setFillColor(sf::Color::White);
+            }
+        }
+
+        window.clear();
+
+        // Yellow line in between.
+        if (mouse_position.x > 300 && mouse_position.x < 400)
+        {
+            window.clear(sf::Color::Yellow);
+        }
+
+        //horizontal white line
+        int x = 0;
+        while (x <= SCREEN_WIDTH)
+        {
+            sf::CircleShape circle;
+            circle.setRadius(10.0f);
+            circle.setPosition(x, 50);
+            window.draw(circle);
+            x = x + 50;
+        }
+
+        // Circles - Magenta
+        for (int i = 0; i <= mouse_position.x; i += 50)
+        {
+            for (int j = 0; j <= mouse_position.y; j += 50)
+            {
+                sf::CircleShape col_circle;
+                col_circle.setRadius(10.0f);
+                col_circle.setPosition(i, j);
+                col_circle.setFillColor(sf::Color::Magenta);
+                window.draw(col_circle);
+            }
+        }
+        // Mouse - Lines
+        for (int x = 0; x <= mouse_position.x; x += 10)
+        {
+            for (int y = 0; y <= mouse_position.y; y += 10)
+            {
+                sf::VertexArray lines(sf::LinesStrip, 5);
+                lines[0].position = sf::Vector2f(x, y);
+                lines[1].position = sf::Vector2f(x, y + 200);
+                lines[2].position = sf::Vector2f(x + 200, y + 200);
+                lines[3].position = sf::Vector2f(x + 200, y);
+                lines[4].position = sf::Vector2f(x, y);
+                window.draw(lines);
+            }
+        }
+        window.draw(rectangle);
+        window.display();
+    }
+    return 0;
+}
