@@ -1,0 +1,78 @@
+#include <SFML/Graphics.hpp>
+#include <time.h>
+#include <random>
+#include <cstdlib>
+#include <iostream>
+
+
+using namespace sf;
+using namespace std;
+
+float width = 800;
+float height = 600;
+
+std::random_device rd;
+std::mt19937 rng{ rd() };
+
+int main()
+{
+    
+    system("TITLE Color Program");
+    system("COLOR 0G");
+    RenderWindow app(VideoMode(width, height), "Game!");
+    app.setFramerateLimit(60);
+    
+    sf::Vector2i mouse_position;
+    mouse_position = sf::Mouse::getPosition(app);
+    
+    std::vector<sf::CircleShape*> vectorArray;
+    
+    while (app.isOpen())
+    {
+        Event e;
+        while (app.pollEvent(e))
+        {
+            if (e.type == Event::Closed)
+                app.close();
+            
+            if (e.type == sf::Event::MouseButtonPressed
+                    &&
+                    e.mouseButton.button == sf::Mouse::Left)
+            {
+                mouse_position.x = e.mouseButton.x;
+                mouse_position.y = e.mouseButton.y;
+            }
+            
+            
+        }
+        
+        std::uniform_int_distribution<int> colorDidt(0, 255);
+        app.clear();
+        
+        sf::CircleShape* ball = new sf::CircleShape;
+        ball->setRadius(50.0f);
+        
+        ball->setPosition(mouse_position.x, mouse_position.y);
+        sf::Color co(colorDidt(rng), colorDidt(rng), colorDidt(rng));
+        ball->setFillColor(co);
+        
+        vectorArray.push_back(ball);
+        
+        app.clear();
+        
+        for (int i = 0; i < vectorArray.size(); i++)
+        {
+            app.draw(*vectorArray[i]);
+        }
+        
+        app.display();
+    }
+    
+    for (int i = 0; i < vectorArray.size(); i++)
+    {
+        delete vectorArray[i];
+        vectorArray[i] = 0;
+    }
+    
+    return 0;
+}
