@@ -1,0 +1,53 @@
+// Using Vector x and y
+#include <SFML/Graphics.hpp>
+#include <time.h>
+#include <iostream>
+
+using namespace sf;
+using namespace std;
+
+float width = 800;
+float height = 600;
+
+
+int main()
+{
+    RenderWindow app(VideoMode(width, height), "Doodle Game!");
+    app.setFramerateLimit(60);
+
+    CircleShape circle;
+    circle.setRadius(50.0f);
+    circle.setFillColor(Color::Red);
+
+    int x = 100,y = 100,xspeed = 5, yspeed = 3;
+
+    Vector2f *location = new  Vector2f(x,y);
+    Vector2f *velocity=  new Vector2f(xspeed,yspeed);
+
+    while (app.isOpen())
+    {
+        Event e;
+        while (app.pollEvent(e))
+        {
+            if (e.type == Event::Closed)
+                app.close();
+
+        }
+
+        circle.setPosition(sf::Vector2f(location->x, location->y));
+
+        *location =  *location + *velocity;
+
+        if ((location->x > width - 100) || (location->x  < 0)) {
+            velocity->x = velocity->x * -1;
+        }
+        if ((location->y > height - 100) || (location->y < 0)) {
+            velocity->y = velocity->y * -1;
+        }
+
+        app.clear();
+        app.draw(circle);
+        app.display();
+    }
+    return 0;
+}
