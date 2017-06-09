@@ -1,0 +1,61 @@
+//LOOPS
+
+#include <SFML/Graphics.hpp>
+#include <iostream>
+using namespace std;
+
+const int SCREEN_WIDTH = 600;
+const int SCREEN_HEIGHT = 400;
+
+int main(int argc, char * argv[])
+{
+    bool going = false;
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "SFML WORK!");
+    
+    sf::Vector2i mouse_position;
+    mouse_position = sf::Mouse::getPosition(window);
+    
+    sf::CircleShape circle;
+    
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+            
+            if (event.type == sf::Event::MouseMoved)
+            {
+                mouse_position.x = event.mouseButton.x;
+                mouse_position.y = event.mouseButton.y;
+                going = !going;
+            }
+        }
+        window.clear();
+        circle.setRadius(20.0f);
+        float x = 0;
+        while (x < 400)
+        {
+            if (mouse_position.x < 1)
+            {
+                x = x + 1;
+            }
+            else
+            {
+                x = x + mouse_position.x;
+            }
+            circle.setPosition(sf::Vector2f(x, 100.0f));
+            window.draw(circle);
+        }
+        
+        if (going)
+        {
+            circle.setPosition(sf::Vector2f(x, 100.0f));
+            x = x + 0.1;
+        }
+        window.draw(circle);
+        window.display();
+    }
+    return 0;
+}
