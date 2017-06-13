@@ -1,0 +1,55 @@
+#include <SFML/Graphics.hpp>
+#include <time.h>
+#include <iostream>
+
+using namespace sf;
+using namespace std;
+
+float width = 800;
+float height = 600;
+
+sf::VertexArray star(float x, float y)
+{
+	sf::VertexArray lines(sf::LinesStrip, 11);
+	lines[0].position = sf::Vector2f(x, y - 50);
+	lines[1].position = sf::Vector2f(x + 14, y - 20);
+	lines[2].position = sf::Vector2f(x + 47, y - 15);
+	lines[3].position = sf::Vector2f(x + 23, y + 7);
+	lines[4].position = sf::Vector2f(x + 29, y + 40);
+	lines[5].position = sf::Vector2f(x, y + 25);
+	lines[6].position = sf::Vector2f(x - 29, y + 40);
+	lines[7].position = sf::Vector2f(x - 23, y + 7);
+	lines[8].position = sf::Vector2f(x - 47, y - 15);
+	lines[9].position = sf::Vector2f(x - 14, y - 20);
+	lines[10].position = sf::Vector2f(x, y - 47);
+	return lines;
+}
+
+int main()
+{
+	RenderWindow app(VideoMode(width, height), " Game!");
+	app.setFramerateLimit(60);
+
+	float x = 50, y = 50;
+
+	while (app.isOpen())
+	{
+		sf::Event event;
+		while (app.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed || event.key.code == sf::Keyboard::Escape)
+				app.close();
+		}
+
+		app.clear();
+		for (int i = 0; i < 8; i++)
+		{
+			for (int j = 0; j < 6; j++)
+			{
+				app.draw(star(i * 100 + x, j * 100 + y));
+			}
+		}
+		app.display();
+	}
+	return 0;
+}
