@@ -1,0 +1,105 @@
+#include <SFML/Graphics.hpp>
+#include <time.h>
+#include <iostream>
+#include <vector>
+
+using namespace sf;
+using namespace std;
+
+float width = 800;
+float height = 600;
+
+int main()
+{
+	RenderWindow app(VideoMode(width, height), " Game!");
+	app.setFramerateLimit(60);
+
+    float x = 0, y = 0, x1 = 0, y1 = 0, x2 = 0, y2 = 0, xspeed = 1;
+
+	sf::CircleShape *circle = new sf::CircleShape(10.0f);
+	circle->setPosition(400.0f, 580.0f);
+	sf::RectangleShape *rect = new sf::RectangleShape(sf::Vector2f(100.0f, 30.0f));
+
+	while (app.isOpen())
+	{
+		sf::Event Event;
+		while (app.pollEvent(Event))
+		{
+			switch (Event.type)
+			{
+			case sf::Event::Closed:
+			{
+				app.close();
+				break;
+			}
+			case sf::Event::KeyPressed:
+			{
+				if (Event.key.code == sf::Keyboard::Left)
+					circle->move(-5.0f, 0.0f);
+
+				if (Event.key.code == sf::Keyboard::Right)
+					circle->move(5.0f, 0.0f);
+			
+
+				if (Event.key.code == sf::Keyboard::Up)
+					circle->move(0.0f, -5.0f);
+	
+	
+				if (Event.key.code == sf::Keyboard::Down)
+					circle->move(0.0f,5.0f);
+				break;
+			}
+			}
+		}
+
+		if (x > width)
+		{
+			x = -x -width;
+		}
+		if (x1 > width)
+		{
+			x1 = -x1 - width;
+		}
+
+		if (xspeed > 0 && x2 > width)
+		{
+			x2 = -width;
+		}
+		else if (x2 < -width - 250)
+		{
+			x2 = width;
+		}
+
+		app.clear();
+
+		for (int i = 0; i < 5; i++)
+		{
+			rect->setPosition(i * 150 + x, y + 150);
+			//rect->setRadius(20.0f);
+			rect->setFillColor(sf::Color::Red);
+			app.draw(*rect);
+			x = x + 3;
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			rect->setPosition(i * 350 + x1, y1 + 350);
+			//rect->setRadius(10.0f);
+			rect->setFillColor(sf::Color::Yellow);
+			app.draw(*rect);
+			x1 = x1 + 2;
+		}
+
+		for (int i = 0; i < 5; i++)
+		{
+			rect->setPosition(i * 250 + x2, y2 + 250);
+			//rect->setRadius(15.0f);
+			rect->setFillColor(sf::Color::Green);
+			app.draw(*rect);
+			x2 = x2 - xspeed;
+		}
+		app.draw(*circle);
+		app.display();
+	}
+	return 0;
+}
