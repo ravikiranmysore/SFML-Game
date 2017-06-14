@@ -1,0 +1,51 @@
+#include <SFML/Graphics.hpp>
+#include <time.h>
+#include <iostream>
+using namespace sf;
+using namespace std;
+
+float width = 800;
+float height = 800;
+float d = 10;
+float n = 50;
+
+int main()
+{
+	RenderWindow app(VideoMode(width, height), " Game!");
+	app.setFramerateLimit(60);
+	
+	 sf::VertexArray line(sf::Lines, 2);
+	 
+	while (app.isOpen())
+	{
+		sf::Event Event;
+		while (app.pollEvent(Event))
+		{
+			switch (Event.type)
+			{
+			case sf::Event::Closed:
+			{
+				app.close();
+				break;
+			}
+	
+			}
+		}		
+		app.clear();
+				
+		float k = n / d;
+		for (float a = 0; a < 2 * 3.14*d ; a += 0.1) 
+		{
+			float r = 100 * cos(k * a);
+			float x = r * cos(a);
+			float y = r * sin(a);	
+			line[0].position = sf::Vector2f(400, 400);
+			line[0].color = sf::Color::Green;
+			line[1].position = sf::Vector2f(x+400, y+400 );
+			line[1].color = sf::Color::Red;
+	        app.draw(line);
+		}   
+		app.display();
+	}
+	return 0;
+}
